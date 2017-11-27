@@ -12,13 +12,14 @@ using namespace std;
 
 class Rcmatrix{
     struct Rcarray;
-    Rcarray* data{};
+    Rcarray* data;
 public:
     class Cref;
     Rcmatrix(unsigned int i, unsigned int j, double **p);
     Rcmatrix(unsigned int i, unsigned int j);
-    Rcmatrix(const Rcmatrix&);
+    Rcmatrix(const Rcmatrix& source);
     explicit Rcmatrix(const char FilePath[]);
+    //explicit Rcmatrix(const string &filename[]);
     ~Rcmatrix();
     Rcmatrix& operator=(const Rcmatrix&);
     Rcmatrix operator-() const;
@@ -38,5 +39,6 @@ private:
     double read(unsigned int i, unsigned int j) const;
     void write(unsigned int i, unsigned int j, double c);
 };
+
 
 #endif //RCMATRIX_RCMATRIX_H

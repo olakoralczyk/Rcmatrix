@@ -6,68 +6,11 @@
 #include "IncorrectIndices.h"
 #include "Nullptr.h"
 #include "Dimension.h"
-#include <fstream>
 
 struct Rcmatrix::Rcarray {
     double** s{};
     unsigned int sizex{}, sizey{};
     int reference;
-
-    explicit Rcarray(const char FilePath[]) {
-    //explicit Rcarray(const std::string &filename[]) {
-        ifstream in(FilePath);
-        if (!in) {
-            cout << "Cannot open file.\n";
-            return;
-        }
-        in >> sizex;
-        in >> sizey;
-        reference = 1;
-        s = new double*[sizex];
-        for (unsigned int i = 0 ; i < sizex ; i++) {
-            s[i] = new double[sizey];
-        }
-
-        for (unsigned int i = 0 ; i < sizex ; i++) {
-            for (unsigned int j = 0; j < sizey; j++) {
-                in>>s[i][j];
-            }
-        }
-        in.close();
-    }
-    /*
-     void assign(unsigned int nsize, unsigned int msize, double **p) {
-       if(nsize != sizex || msize != sizey) {
-           nsize = sizex;
-           msize = sizey;
-           auto** ns = new double*[nsize];
-           unsigned int i;
-           try {
-               for (i = 0; i < sizex; ++i) {
-                   s[i] = new double[msize];
-                   for (unsigned int j = 0; j < sizey; ++j) {
-                       s[i][j] = p[i][j];
-                   }
-               }
-           }
-           catch (...) {
-               for (unsigned int j = 0; j < i; ++j) {
-                   delete [] s[j];
-               }
-               delete [] s;
-               throw;
-           }
-           delete [] s;
-           s = ns;
-       }
-       else {
-           for (unsigned int i = 0; i < sizex; ++i) {
-               for (unsigned int j = 0; j < sizey; ++j) {
-                   s[i][j] = p[i][j];
-               }
-           }
-       }
-   }*/
 
     Rcarray(unsigned int nsize, unsigned int msize) {
         reference=1;
@@ -125,46 +68,11 @@ struct Rcmatrix::Rcarray {
     Rcarray* detach() {
         if(reference == 1)
             return this;
-        //auto*t = new Rcarray(sizex, sizey, s);
-        //Rcmatrix(const Rcmatrix&)
         auto*t = new Rcarray(*this);
         reference--;
         return t;
     }
 
-    /*void assign(unsigned int nsize, unsigned int msize, double **p) {
-        if(nsize != sizex || msize != sizey) {
-            nsize = sizex;
-            msize = sizey;
-            auto** ns = new double*[nsize];
-            unsigned int i;
-            try {
-                for (i = 0; i < sizex; ++i) {
-                    s[i] = new double[msize];
-                    for (unsigned int j = 0; j < sizey; ++j) {
-                        s[i][j] = p[i][j];
-                    }
-                }
-            }
-            catch (...) {
-                for (unsigned int j = 0; j < i; ++j) {
-                    delete [] s[j];
-                }
-                delete [] s;
-                throw;
-            }
-            delete [] s;
-            s = ns;
-        }
-        else {
-            for (unsigned int i = 0; i < sizex; ++i) {
-                for (unsigned int j = 0; j < sizey; ++j) {
-                    s[i][j] = p[i][j];
-                }
-            }
-        }
-    }*/
-    //Rcarray(const Rcarray&) = default;
     Rcarray(const Rcarray& source) : Rcarray(source.sizex, source.sizey) {
         unsigned i;
         for (i=0; i < sizex; ++i) {
@@ -183,7 +91,7 @@ class Rcmatrix::Cref {
     unsigned int i, j;
     Cref (Rcmatrix& ss, unsigned int ii, unsigned int jj): s(ss), i(ii), j(jj) {};
 public:
-    explicit operator double() const {//to avoid unintentional implicit conversions
+    explicit operator double() const {
         return s.read(i, j);
     }
     Rcmatrix::Cref& operator = (double c) {
@@ -191,10 +99,6 @@ public:
         return *this;
     }
 };
-
-Rcmatrix::Rcmatrix(const char FilePath[]){
-    data = new Rcarray(FilePath);
-}
 
 Rcmatrix::Rcmatrix(unsigned int i, unsigned int j) {
     data = new Rcarray(i, j);
@@ -314,7 +218,6 @@ ostream& operator<<(ostream& o, const Rcmatrix& s) {
 istream& operator>>(istream &input, const Rcmatrix &M) {
     for (unsigned int i = 0; i < M.data->sizex; ++i) {
         for (unsigned int j = 0; j < M.data->sizey; ++j) {
-            std::cout << "Please input value for row " << i << " column " << j << " : ";
             input >> M.data->s[i][j];
         }
     }
@@ -346,9 +249,3 @@ void Rcmatrix::write(unsigned int i, unsigned int j, double c) {
     data = data->detach();
     data->s[i][j] = c;
 }
-
-
-//Rcmatrix::Rcmatrix(const std::string &filename[]) {
-//    data = new Rcarray(filename);
-//}
-

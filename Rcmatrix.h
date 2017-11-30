@@ -18,8 +18,6 @@ public:
     Rcmatrix(unsigned int i, unsigned int j, double **p);
     Rcmatrix(unsigned int i, unsigned int j);
     Rcmatrix(const Rcmatrix& source);
-    explicit Rcmatrix(const char FilePath[]);
-    //explicit Rcmatrix(const string &filename[]);
     ~Rcmatrix();
     Rcmatrix& operator=(const Rcmatrix&);
     Rcmatrix operator-() const;

@@ -1,12 +1,16 @@
 #include <iostream>
+#include <fstream>
 #include "Rcmatrix.h"
 
 using namespace std;
 
 int main() {
     try {
-        Rcmatrix C1("mat4.txt");
-        Rcmatrix C2("mat4.txt");
+        fstream input ("mat4.txt");
+        Rcmatrix C1(2, 2);
+        Rcmatrix C2(2, 2);
+        input >> C1;
+        input >> C2;
         cout << "---------" << endl;
         cout << C1;
         cout << "---------" << endl;
@@ -21,10 +25,12 @@ int main() {
         cout << e.what() << endl;
         cout << "-------------------------------" << endl;
     }
-
     try {
-        Rcmatrix C1("mat4.txt");
-        Rcmatrix C2("mat4.txt");
+        fstream input ("mat4.txt");
+        Rcmatrix C1(2, 3);
+        Rcmatrix C2(2, 3);
+        input >> C1;
+        input >> C2;
         cout << "---------" << endl;
         cout << C1;
         cout << "---------" << endl;
@@ -41,8 +47,11 @@ int main() {
     }
 
     try {
-        Rcmatrix C1("mat4.txt");
-        Rcmatrix C2("mat4.txt");
+        fstream input ("mat4.txt");
+        Rcmatrix C1(2, 2);
+        Rcmatrix C2(2, 2);
+        input >> C1;
+        input >> C2;
         cout << "---------" << endl;
         cout << C1;
         cout << "---------" << endl;
@@ -59,13 +68,17 @@ int main() {
     }
 
     try {
-        Rcmatrix C1("mat.txt");
-        Rcmatrix C2("mat3.txt");
+        fstream input ("mat4.txt");
+        Rcmatrix C1(2, 3);
+        Rcmatrix C2(3, 2);
+        input >> C1;
+        input >> C2;
+        cout << "---------" << endl;
         cout << C1;
         cout << "---------" << endl;
         cout << C2;
         cout << "---------" << endl;
-        Rcmatrix C3 = C1 * C2;
+        Rcmatrix C3 = C1 - C2;
         cout << C3;
         cout << "-------------------------------" << endl;
     }

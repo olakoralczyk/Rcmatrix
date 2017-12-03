@@ -73,6 +73,39 @@ struct Rcmatrix::Rcarray {
         return t;
     }
 
+    void assign(unsigned int nsize, unsigned int msize, double **p) {
+        if(nsize != sizex || msize != sizey) {
+            nsize = sizex;
+            msize = sizey;
+            auto** ns = new double*[nsize];
+            unsigned int i;
+            try {
+                for (i = 0; i < sizex; ++i) {
+                    s[i] = new double[msize];
+                    for (unsigned int j = 0; j < sizey; ++j) {
+                        s[i][j] = p[i][j];
+                    }
+                }
+            }
+            catch (...) {
+                for (unsigned int j = 0; j < i; ++j) {
+                    delete [] s[j];
+                }
+                delete [] s;
+                throw;
+            }
+            delete [] s;
+            s = ns;
+        }
+        else {
+            for (unsigned int i = 0; i < sizex; ++i) {
+                for (unsigned int j = 0; j < sizey; ++j) {
+                    s[i][j] = p[i][j];
+                }
+            }
+        }
+    }
+
     Rcarray(const Rcarray& source) : Rcarray(source.sizex, source.sizey) {
         unsigned i;
         for (i=0; i < sizex; ++i) {
@@ -125,6 +158,8 @@ Rcmatrix& Rcmatrix::operator=(const Rcmatrix & x)
     x.data->reference++;
     if(--data->reference == 0)
         delete data;
+    else if (data->reference==1)
+        data->assign(data->sizex, data->sizey, data->s);
     data = x.data;
     return *this;
 }

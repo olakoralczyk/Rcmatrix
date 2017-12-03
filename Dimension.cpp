@@ -4,7 +4,7 @@
 
 #include "Dimension.h"
 
-Dimension::Dimension(unsigned int ai, unsigned int aj, unsigned int bi, unsigned int bj): ai(ai), aj(aj), bi(bi), bj(bj) {
+Dimension::Dimension(unsigned int ai, unsigned int aj, unsigned int bi, unsigned int bj) {
     a.append("Improper dimensions for operation, LHS ");
     a.append(std::to_string(ai));
     a.append(" x ");

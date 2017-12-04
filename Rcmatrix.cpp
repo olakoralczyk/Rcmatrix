@@ -8,8 +8,8 @@
 #include "Dimension.h"
 
 struct Rcmatrix::Rcarray {
-    double** s{};
-    unsigned int sizex{}, sizey{};
+    double** s;
+    unsigned int sizex, sizey;
     int reference;
 
     Rcarray(unsigned int nsize, unsigned int msize) {
@@ -165,8 +165,7 @@ Rcmatrix& Rcmatrix::operator=(const Rcmatrix & x)
 }
 
 Rcmatrix& Rcmatrix::operator+=(const Rcmatrix& RHS) {
-    if (data->sizex != RHS.data->sizex || data->sizey != RHS.data->sizey)
-        throw Dimension(data->sizex, data->sizey, RHS.data->sizex, RHS.data->sizey);
+	checkDimension(RHS);
     data = data->detach();
     for (unsigned int i = 0; i < data->sizex; ++i) {
         for (unsigned int j = 0; j < data->sizey; ++j) {
@@ -190,10 +189,8 @@ Rcmatrix Rcmatrix::operator-() const {
     return negation;
 }
 
-Rcmatrix& Rcmatrix::operator-=(const Rcmatrix & RHS) {
-    if (data->sizex != RHS.data->sizex || data->sizey != RHS.data->sizey) {
-        throw Dimension(data->sizex, data->sizey, RHS.data->sizex, RHS.data->sizey);
-    }
+Rcmatrix& Rcmatrix::operator-=(const Rcmatrix& RHS) {
+	checkDimension(RHS);
     data = data->detach();
     for (unsigned int i = 0; i < data->sizex; ++i) {
         for (unsigned int j = 0; j < data->sizey; ++j) {
@@ -283,4 +280,10 @@ double Rcmatrix::read(unsigned int i, unsigned int j) const {
 void Rcmatrix::write(unsigned int i, unsigned int j, double c) {
     data = data->detach();
     data->s[i][j] = c;
+}
+
+void Rcmatrix::checkDimension(const Rcmatrix& RHS) {
+	if (data->sizex != RHS.data->sizex || data->sizey != RHS.data->sizey) {
+        throw Dimension(data->sizex, data->sizey, RHS.data->sizex, RHS.data->sizey);
+    }
 }

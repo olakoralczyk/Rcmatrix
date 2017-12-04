@@ -4,7 +4,7 @@
 
 #include "IncorrectIndices.h"
 
-IncorrectIndices::IncorrectIndices(unsigned int i) : i(i) {
+IncorrectIndices::IncorrectIndices(unsigned int i) {
     a.append("index i: ");
     a.append(std::to_string(i));
     a.append(" is not in range");

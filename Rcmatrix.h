@@ -36,6 +36,7 @@ private:
     void check (unsigned int i, unsigned int j) const;
     double read(unsigned int i, unsigned int j) const;
     void write(unsigned int i, unsigned int j, double c);
+	void checkDimension(const Rcmatrix&);
 };
 
 

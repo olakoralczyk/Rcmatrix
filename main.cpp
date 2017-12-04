@@ -69,8 +69,8 @@ int main() {
 
     try {
         fstream input ("mat4.txt");
-        Rcmatrix C1(2, 3);
-        Rcmatrix C2(3, 2);
+        Rcmatrix C1(2, 1);
+        Rcmatrix C2(3, 4);
         input >> C1;
         input >> C2;
         cout << "---------" << endl;

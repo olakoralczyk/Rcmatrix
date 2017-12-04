@@ -8,7 +8,6 @@
 #include <ostream>
 
 class IncorrectIndices: public std::exception {
-    unsigned int i;
     std::string a;
 public:
     explicit IncorrectIndices(unsigned int i);
